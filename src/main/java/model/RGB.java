@@ -12,7 +12,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 public class RGB {
-	
+
 	private String pathDirectorio;
 	private String pathFichero;
 	private DoubleProperty red;
@@ -22,11 +22,11 @@ public class RGB {
 	private DoubleProperty width;
 	private DoubleProperty locationX;
 	private DoubleProperty locationY;
-	
+
 	public RGB() {
-		pathDirectorio = System.getProperty("user.home")+ File.separator + ".VentanaConMemoria";
+		pathDirectorio = System.getProperty("user.home") + File.separator + ".VentanaConMemoria";
 		pathFichero = pathDirectorio + File.separator + "ventana.config";
-		
+
 		red = new SimpleDoubleProperty();
 		blue = new SimpleDoubleProperty();
 		green = new SimpleDoubleProperty();
@@ -35,8 +35,6 @@ public class RGB {
 		locationX = new SimpleDoubleProperty();
 		locationY = new SimpleDoubleProperty();
 	}
-	
-	
 
 	public DoubleProperty getRed() {
 		return red;
@@ -93,21 +91,20 @@ public class RGB {
 	public void setLocationY(DoubleProperty locationY) {
 		this.locationY = locationY;
 	}
-	
 
 	public void gestionarFichero() {
 		try {
-			
+
 			File directorio = new File(pathDirectorio);
 			directorio.mkdir();
-			
+
 			File config = new File(pathFichero);
 			boolean creacion = config.createNewFile();
-			
-			if(creacion) {
+
+			if (creacion) {
 				try (OutputStream output = new FileOutputStream(config.getPath())) {
 					Properties prop = new Properties();
-					
+
 					prop.setProperty("background.red", "0");
 					prop.setProperty("background.blue", "0");
 					prop.setProperty("background.green", "0");
@@ -115,57 +112,74 @@ public class RGB {
 					prop.setProperty("size.height", "278");
 					prop.setProperty("location.x", "440");
 					prop.setProperty("location.y", "244");
-					
+
 					prop.store(output, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+
+				try (InputStream input = new FileInputStream(pathFichero)) {
+
+					Properties prop = new Properties();
+
+					// load a properties file
+					prop.load(input);
+
+					red.set(Double.parseDouble(prop.getProperty("background.red")));
+					blue.set(Double.parseDouble(prop.getProperty("background.blue")));
+					green.set(Double.parseDouble(prop.getProperty("background.green")));
+					width.set(Double.parseDouble(prop.getProperty("size.width")));
+					height.set(Double.parseDouble(prop.getProperty("size.height")));
+					locationX.set(Double.parseDouble(prop.getProperty("location.x")));
+					locationY.set(Double.parseDouble(prop.getProperty("location.y")));
+
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			} else {
 				try (InputStream input = new FileInputStream(pathFichero)) {
 
-		            Properties prop = new Properties();
+					Properties prop = new Properties();
 
-		            // load a properties file
-		            prop.load(input);
+					// load a properties file
+					prop.load(input);
 
-		            
-		            red.set(Double.parseDouble(prop.getProperty("background.red")));
-		            blue.set(Double.parseDouble(prop.getProperty("background.blue")));
-		            green.set(Double.parseDouble(prop.getProperty("background.green")));
-		            width.set(Double.parseDouble(prop.getProperty("size.width")));
-		            height.set(Double.parseDouble(prop.getProperty("size.height")));
-		            locationX.set(Double.parseDouble(prop.getProperty("location.x")));
-		            locationY.set(Double.parseDouble(prop.getProperty("location.y")));
-		            
-		            
-		        } catch (IOException ex) {
-		            ex.printStackTrace();
-		        }
+					red.set(Double.parseDouble(prop.getProperty("background.red")));
+					blue.set(Double.parseDouble(prop.getProperty("background.blue")));
+					green.set(Double.parseDouble(prop.getProperty("background.green")));
+					width.set(Double.parseDouble(prop.getProperty("size.width")));
+					height.set(Double.parseDouble(prop.getProperty("size.height")));
+					locationX.set(Double.parseDouble(prop.getProperty("location.x")));
+					locationY.set(Double.parseDouble(prop.getProperty("location.y")));
+
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
-	
+
 	public void guardarFichero() {
 		try (OutputStream output = new FileOutputStream(pathFichero)) {
 			Properties prop = new Properties();
-			
-			prop.setProperty("background.red", red.get()+"");
-			prop.setProperty("background.blue", blue.get()+"");
-			prop.setProperty("background.green", green.get()+"");
-			prop.setProperty("size.width", width.get()+"");
-			prop.setProperty("size.height", height.get()+"");
-			prop.setProperty("location.x", locationX.get()+"");
-			prop.setProperty("location.y", locationY.get()+"");
-			
+
+			prop.setProperty("background.red", red.get() + "");
+			prop.setProperty("background.blue", blue.get() + "");
+			prop.setProperty("background.green", green.get() + "");
+			prop.setProperty("size.width", width.get() + "");
+			prop.setProperty("size.height", height.get() + "");
+			prop.setProperty("location.x", locationX.get() + "");
+			prop.setProperty("location.y", locationY.get() + "");
+
 			prop.store(output, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 }

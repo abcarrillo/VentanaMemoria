@@ -37,20 +37,13 @@ public class RGBController implements Initializable{
 		return rgb;
 	}
 	
-	public void gestionarFichero() {
-		rgb.gestionarFichero();
-	}
-
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+		rgb.gestionarFichero();
+		
+		view.setStyle("-fx-background-color: rgb(" + rgb.getRed().get() + "," + rgb.getGreen().get() + ", " + rgb.getBlue().get() + ");");
 		slRed.valueProperty().bindBidirectional(rgb.getRed());
 		slBlue.valueProperty().bindBidirectional(rgb.getBlue());
 		slGreen.valueProperty().bindBidirectional(rgb.getGreen());
-		
-		/*
-		view.prefHeightProperty().bind(rgb.getHeight());
-		view.prefWidthProperty().bind(rgb.getWidth());
-		*/
 	}
 	
 	
