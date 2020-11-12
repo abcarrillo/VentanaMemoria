@@ -38,12 +38,14 @@ public class RGBController implements Initializable{
 	}
 	
 	public void initialize(URL location, ResourceBundle resources) {
-		rgb.gestionarFichero();
 		
-		view.setStyle("-fx-background-color: rgb(" + rgb.getRed().get() + "," + rgb.getGreen().get() + ", " + rgb.getBlue().get() + ");");
-		slRed.valueProperty().bindBidirectional(rgb.getRed());
-		slBlue.valueProperty().bindBidirectional(rgb.getBlue());
-		slGreen.valueProperty().bindBidirectional(rgb.getGreen());
+		slRed.valueProperty().bindBidirectional(rgb.redProperty());
+		slBlue.valueProperty().bindBidirectional(rgb.blueProperty());
+		slGreen.valueProperty().bindBidirectional(rgb.greenProperty());
+		
+		rgb.colorProperty().addListener((o, ov, nv) -> {
+			view.setStyle("-fx-background-color: rgb(" + nv.getRed()*256 + "," + nv.getGreen()*256 + ", " + nv.getBlue()*256 + ");");
+		});
 	}
 	
 	
