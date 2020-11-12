@@ -1,47 +1,52 @@
 package app;
 
+
 import controller.RGBController;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.Config;
 
 public class App extends Application{
 	
 	private RGBController controller;
+	private Config config = new Config();
 
 	@Override
 	public void init() throws Exception {
-		controller = new RGBController();
-		controller.getModel().gestionarFichero();
-		
+		config.cargarFichero();
 	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
+
+		controller = new RGBController();
 		
+		controller.getModel().redProperty().bindBidirectional(config.redProperty());
+		controller.getModel().greenProperty().bindBidirectional(config.greenProperty());
+		controller.getModel().blueProperty().bindBidirectional(config.blueProperty());
+
 		//Bindeo y set de la localizacion de la ventana en la pantalla
-		primaryStage.setX(controller.getModel().getLocationX().get());
-		primaryStage.setY(controller.getModel().getLocationY().get());
-		controller.getModel().getLocationX().bind(primaryStage.xProperty());
-		controller.getModel().getLocationY().bind(primaryStage.yProperty());
+		primaryStage.setX(config.getLocationX());
+		primaryStage.setY(config.getLocationY());
 		
-		//Creacion de la escena de la ventana y bindeo de su tamaño
-		Scene scene = new Scene(controller.getView(), controller.getModel().getWidth().get(), controller.getModel().getHeight().get());
-		controller.getModel().getHeight().bind(scene.heightProperty());
-		controller.getModel().getWidth().bind(scene.widthProperty());
+		config.locationXProperty().bind(primaryStage.xProperty());
+		config.locationYProperty().bind(primaryStage.yProperty());
+
+		//Creacion de la escena de la ventana y bindeo de su tamaï¿½o
+		Scene scene = new Scene(controller.getView(), config.getWidth(), config.getHeight());
+		
+		config.heightProperty().bind(scene.heightProperty());
+		config.widthProperty().bind(scene.widthProperty());
 		
 		primaryStage.setTitle("Ventana con memoria");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 	
-	
-	
 	@Override
 	public void stop() throws Exception {
-		controller.getModel().guardarFichero();
+		config.guardarFichero();
 	}
 
 	public static void main(String[] args) {
